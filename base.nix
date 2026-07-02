@@ -18,6 +18,19 @@ in {
 
   networking.firewall.allowedTCPPorts = [ openSshPort ];
 
+  nix = {
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 90d";
+    };
+
+    settings.experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+  };
+
   # Enable OpenSSH on each container
   services = {
     openssh = {
