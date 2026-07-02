@@ -12,14 +12,11 @@ in {
   environment = {
     # Some parameters can be set in /etc/wax/ files to configure the container for a specific customer
     etc = {
-      "wax/repo".text = lib.mkDefault ''
-        Put url here
-      '';
-      "wax/branch".text = lib.mkDefault ''
-        production-build
-      '';
-      "wax/production".text = lib.mkDefault ''
-        10.2.3.4
+      "wax/env".text = lib.mkDefault ''
+        WAX_BRANCH="production-build"
+        WAX_HOSTNAME="example.com"
+        WAX_PRODUCTION_CONTAINER="10.1.2.3"
+        WAX_REPO="git@github.com:xxx/abc.git"
       '';
     };
 
@@ -29,8 +26,7 @@ in {
   # Set up the Wax build on first nixos rebuild
   system.userActivationScripts.waxSetup = {
     text = ''
-      WAX_BRANCH=$(cat /etc/wax/branch | head -n 1)
-      WAX_REPO=$(cat /etc/wax/repo | head -n 1)
+      source /etc/wax/env
 
       if [ ! -d "${waxPath}" ]; then
         ${pkgs.git}/bin/git clone -b "$WAX_BRANCH" "$WAX_REPO" "${waxPath}"
