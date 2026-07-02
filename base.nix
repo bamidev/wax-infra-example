@@ -27,7 +27,7 @@ in {
 
       settings = {
         PasswordAuthentication = false;
-        PermitRootLogin = "no";
+        PermitRootLogin = "yes";
       };
     };
   };
