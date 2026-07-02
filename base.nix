@@ -4,7 +4,17 @@ let
 in {
   imports = [
     ./hardware-configuration.nix
+    ./qemu.nix
+    ./bootloader.nix
   ];
+
+  # VM provisioning fix, needed by BlackHOST KVM hypervisor during creation
+  # can be removed, however will result in losing the ability for VM password reset & network reconfiguring
+  environment.etc = {
+    fstab.mode = "0644";
+    hosts.mode = "0644";
+    os-release.mode = "0644";
+  };
 
   networking.firewall.allowedTCPPorts = [ openSshPort ];
 
