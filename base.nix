@@ -2,6 +2,10 @@
 let
   openSshPort = 27022;
 in {
+  imports = [
+    ./hardware-configuration.nix
+  ];
+
   networking.firewall.allowedTCPPorts = [ openSshPort ];
 
   # Enable OpenSSH on each container
