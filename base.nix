@@ -1,4 +1,4 @@
-{ ... }:
+{ hostName, ... }:
 let
   openSshPort = 27022;
 in {
@@ -16,7 +16,11 @@ in {
     os-release.mode = "0644";
   };
 
-  networking.firewall.allowedTCPPorts = [ openSshPort ];
+  networking = {
+    firewall.allowedTCPPorts = [ openSshPort ];
+
+    hostName = hostName;
+  };
 
   nix = {
     gc = {

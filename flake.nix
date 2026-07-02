@@ -27,11 +27,17 @@
       nixosConfigurations = {
         odooInstance = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
+          specialArgs = {
+            hostName = "odooInstance";
+          };
           modules = [ ./instance/odoo.nix ];
         };
 
         pod = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
+          specialArgs = {
+            hostName = "pod";
+          };
           modules = [ ./instance/pod.nix ];
         };
       };
