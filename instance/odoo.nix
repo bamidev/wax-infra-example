@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, pkgs, isProd, ... }:
 let
   waxPath = "/opt/wax";
 
@@ -10,7 +10,7 @@ in {
   ];
 
   environment = {
-    # Some parameters can be set in /etc/wax/ files to configure the container for a specific customer
+    # Some parameters can be set in /etc/wax/ files to configure the container for a specific tenant
     etc = {
       "wax/env".text = lib.mkDefault ''
         WAX_BRANCH="production-build"
@@ -20,7 +20,7 @@ in {
       '';
     };
 
-    systemPackages = [ pullProdDataScript ];    
+    systemPackages = lib.optionals (!isProd) [ pullProdDataScript ];    
   };
 
   # Set up the Wax build on first nixos rebuild
