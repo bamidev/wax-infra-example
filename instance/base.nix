@@ -91,8 +91,9 @@ in {
         text =
           ''
             if [ ! -e /etc/nixos/.git ]; then
-              rm -r /etc/nixos
-              ${lib.getExe pkgs.git} clone https://github.com/bamidev/wax-infra-example /etc/nixos
+              ${lib.getExe pkgs.git} -C /etc/nixos init
+              ${lib.getExe pkgs.git} -C /etc/nixos remote add origin https://github.com/bamidev/wax-infra-example
+              ${lib.getExe pkgs.git} -C /etc/nixos pull origin master
               chown -R admin:root /etc/nixos
             fi
           '';
