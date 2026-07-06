@@ -64,6 +64,21 @@
           modules = [ ./instance/base.nix ];
         };
 
+        database = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {
+            hostName = "database";
+          };
+          modules = [ ./instance/database.nix ];
+        };
+
+        database-standby = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {
+            hostName = "database-standby";
+          };
+          modules = [ ./instance/database.nix ];
+        };
 
         odoo-prod = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
