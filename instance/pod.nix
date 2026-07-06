@@ -4,12 +4,24 @@
     ./base.nix
   ];
 
-  # VM provisioning fix, needed by BlackHOST KVM hypervisor during creation
-  # can be removed, however will result in losing the ability for VM password reset & network reconfiguring
-  environment.etc = {
-    fstab.mode = "0644";
-    hosts.mode = "0644";
-    os-release.mode = "0644";
+  boot.kernel.sysctl = {
+    # Recommended for Postgres
+    "vm.overcommit_memory" = 2;
+  };
+
+  environment = {
+    etc = {
+      # VM provisioning fix, needed by BlackHOST KVM hypervisor during creation
+      # can be removed, however will result in losing the ability for VM password reset & network reconfiguring
+      fstab.mode = "0644";
+      hosts.mode = "0644";
+      os-release.mode = "0644";
+    };
+
+    variables = {
+      MALLOC_ARENA_MAX = 1;
+      PG_MALLOC_ARENA_MAX = "";
+    };
   };
 
   networking.firewall.trustedInterfaces = [ "incus-bridge" ];
