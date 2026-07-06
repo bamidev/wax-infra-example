@@ -28,7 +28,8 @@
           incus launch base $1-$2
           incus file delete -f $1-$2/etc/nixos
           incus file push -r /etc/nixos $1-$2/etc/
-          incus exec $1-$2 -- nixos-rebuild switch --flake /etc/nixos#$2
+          incus exec $1-$2 -- chown -R admin:root /etc/nixos
+          incus exec $1-$2 -- nixos-rebuild sudo -u admin switch --flake /etc/nixos#$2
         '';
         createSimpleGroup = pkgs.writers.writeBashBin "create-simple-group" ''
           set -ex
