@@ -26,8 +26,8 @@ in {
   nix = {
     gc = {
       automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 90d";
+      dates = "daily";
+      options = "--delete-older-than 7d";
     };
 
     settings.experimental-features = [
