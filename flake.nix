@@ -95,6 +95,18 @@
           modules = [ ./instance/pod.nix ];
         };
 
+        pod-vps = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {
+            hostName = "pod";
+            fsDriver = "dir";
+          };
+          modules = [
+            ./device/vps.nix
+            ./instance/pod.nix
+          ];
+        };
+
         pod-zfs = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = {

@@ -2,12 +2,6 @@
 let
   openSshPort = 27022;
 in {
-  imports = lib.optionals (hostName == "pod") [
-    ../hardware-configuration.nix
-    ../qemu.nix
-    ../bootloader.nix
-  ];
-
   environment.systemPackages = with pkgs; [
     git
     lsof
