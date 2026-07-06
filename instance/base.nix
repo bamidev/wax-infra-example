@@ -9,6 +9,7 @@ in {
   ];
 
   environment.systemPackages = with pkgs; [
+    git
     lsof
     nano
     psmisc
