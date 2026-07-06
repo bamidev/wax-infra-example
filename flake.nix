@@ -25,7 +25,9 @@
         '';
         createContainer = pkgs.writers.writeBashBin "create-container" ''
           set -ex
-          incus launch base $1 $2
+          incus launch base $1-$2
+          incus file delete -f $1-$2/etc/nixos
+          incus file push -r /etc/nixos $1-$2/etc/
           incus exec $1-$2 -- nixos-rebuild switch --flake /etc/nixos#$2
         '';
         createSimpleGroup = pkgs.writers.writeBashBin "create-simple-group" ''
