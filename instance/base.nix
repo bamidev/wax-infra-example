@@ -93,6 +93,7 @@ in {
             if [ ! -e /etc/nixos/.git ]; then
               rm -r /etc/nixos
               ${lib.getExe pkgs.git} clone https://github.com/bamidev/wax-infra-example /etc/nixos
+              chown -R admin:root /etc/nixos
             fi
           '';
       };
