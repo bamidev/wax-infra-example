@@ -1,5 +1,9 @@
 { pkgs, ... }:
 {
+  imports = [
+    ./base.nix
+  ];
+
   services = {
     patroni = {
       enable = true;
