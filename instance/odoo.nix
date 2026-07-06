@@ -9,6 +9,8 @@ in {
     ./base.nix
   ];
 
+  boot.isContainer = true;
+
   environment = {
     # Some parameters can be set in /etc/wax/ files to configure the container for a specific tenant
     etc = {

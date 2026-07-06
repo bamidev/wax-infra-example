@@ -4,6 +4,8 @@
     ./base.nix
   ];
 
+  boot.isContainer = true;
+
   services = {
     patroni = {
       enable = true;

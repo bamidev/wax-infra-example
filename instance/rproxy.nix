@@ -1,6 +1,6 @@
 { lib, ... }:
 let
-  config = if builtings.pathExist /etc/tenant-config.nix then
+  config = if builtins.pathExist /etc/tenant-config.nix then
     import /etc/tenant-config.nix
   else
     {};
@@ -15,6 +15,8 @@ in {
   ] ++ lib.optionals (builtins.pathExist /etc/tenant/config.nix) [
     /etc/tenant/config.nix
   ];
+
+  boot.isContainer = true;
 
   services = {
     etcd.enable = true;
