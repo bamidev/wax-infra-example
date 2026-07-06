@@ -3,6 +3,7 @@
   services = {
     patroni = {
       enable = true;
+      postgresqlPackage = pkgs.postgresql_17;
 
       settings = {
         postgresql = {
@@ -19,7 +20,7 @@
     };
 
     postgresql = {
-      enable = true;
+      enable = false;
       package = pkgs.postgresql_17;
 
       authentication = ''
