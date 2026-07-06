@@ -23,6 +23,11 @@
           set -e
           ${regenerateImageScript}/bin/regenerate-image base
         '';
+        createContainer = pkgs.writers.writeBashBin "create-container" ''
+          set -ex
+          incus launch base $1 $2
+          incus exec $1-$2 -- nixos-rebuild switch --flake /etc/nixos#$2
+        '';
         createSimpleGroup = pkgs.writers.writeBashBin "create-simple-group" ''
           set -ex
           incus launch base $1-rproxy
@@ -42,6 +47,7 @@
         # The dev shell provides some useful commands to help with managing containers.
         devShells.default = pkgs.mkShell {
           packages = [
+            createContainer
             createSimpleGroup
             regenerateImageScript
             regenerateBaseScript
