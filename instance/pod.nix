@@ -6,7 +6,7 @@
 
   boot.kernel.sysctl = {
     # Recommended for Postgres
-    "vm.overcommit_memory" = 2;
+    #"vm.overcommit_memory" = 2;
   };
 
   environment = {
