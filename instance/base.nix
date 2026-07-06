@@ -90,7 +90,7 @@ in {
         # Run after /dev has been mounted
         text =
           ''
-            if [ ! -e /etc/nixos/flake.nix ]; then
+            if [ ! -e /etc/nixos/.git ]; then
               rm -r /etc/nixos
               ${lib.getExe pkgs.git} clone https://github.com/bamidev/wax-infra-example /etc/nixos
             fi
