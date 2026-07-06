@@ -81,7 +81,22 @@ in {
     rsync.enable = true;
   };
 
-  system.stateVersion = "26.05";
+  system = {
+    stateVersion = "26.05";
+
+    activationScripts = {
+      nixosConfig = {
+        # Run after /dev has been mounted
+        text =
+          ''
+            if [ ! -e /etc/nixos/flake.nix ]; then
+              rm -r /etc/nixos
+              ${lib.getExe pkgs.git} clone https://github.com/bamidev/wax-infra-example /etc/nixos
+            fi
+          '';
+      };
+    };
+  };
 
   users = {
     mutableUsers = true;
