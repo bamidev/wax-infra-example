@@ -6,13 +6,16 @@
     initrd = {
       availableKernelModules = [ "xhci_pci" "ahci" "ehci_pci" "uas" "usb_storage" "sd_mod" ];
       kernelModules = [ "kvm-amd" ];
+      systemd.enable = false;
     };
 
     kernelModules = [ "kvm-amd" ];  
 
     loader.grub = {
       enable = true;
-      device = "/dev/sda";
+      device = "nodev";
+      efiInstallAsRemovable = true;
+      efiSupport = true;
     };
   };
 
@@ -29,18 +32,21 @@
   };
 
   hardware = rec {
-    cpu.amd.updateMicrocode = lib.mkDefault enableRedistributableFirmware;
+    cpu.amd.updateMicrocode = enableRedistributableFirmware;
     enableRedistributableFirmware = lib.mkForce true;
   };
 
   networking = {
     hostId = "b00d1234";
-    useDHCP = true;
+    networkmanager.enable = true;
   };
 
   nixpkgs.hostPlatform = "x86_64-linux";
 
   swapDevices = [
-    { device = "/dev/disk/by-uuid/bb1ecbd6-0eb5-455d-966b-b475411dc222"; }
+    {
+      device = "/dev/disk/by-uuid/bb1ecbd6-0eb5-455d-966b-b475411dc222";
+      randomEncryption.enable = true;
+    }
   ];
 }
