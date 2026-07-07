@@ -10,6 +10,7 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+        lib = nixpkgs.lib;
 
         # This script generates a new image for containers, and loads it into incus
         regenerateImageScript = pkgs.writers.writeBashBin "regenerate-image" (with pkgs; ''
@@ -28,23 +29,19 @@
           incus launch base $1-$2
           incus file delete -f $1-$2/etc/nixos
           incus file push -r /etc/nixos $1-$2/etc/
+          sleep 1
           incus exec $1-$2 -- chown -R admin:root /etc/nixos
-          incus exec $1-$2 -- nixos-rebuild sudo -u admin switch --flake /etc/nixos#$2
+          incus exec $1-$2 -- sudo -u admin nixos-rebuild switch --flake /etc/nixos#$2
+
+          IP4_ADDRESS=$(incus list $1-$2 --format json | ${lib.getExe pkgs.jq}  -r '.[0].state.network.eth0.addresses[] | select(.family=="inet") | .address')
+          # Pin the IPv4 address so that we can use it to configure the containers to find eachother
+          incus config device set $1-$2 eth0 ipv4.address $IP4_ADDRESS
+          echo $IP4_ADDRESS
         '';
         createSimpleGroup = pkgs.writers.writeBashBin "create-simple-group" ''
           set -ex
-          incus launch base $1-rproxy
-          incus exec $1-rproxy -- nixos-rebuild switch --flake /etc/nixos#rproxy
-          incus launch base $1-prod
-          incus exec $1-rproxy -- nixos-rebuild switch --flake /etc/nixos#odoo-prod
-          incus launch base $1-nightly
-          incus exec $1-rproxy -- nixos-rebuild switch --flake /etc/nixos#odoo-nightly
-          incus launch base $1-test
-          incus exec $1-rproxy -- nixos-rebuild switch --flake /etc/nixos#odoo-test
-          incus launch base $1-database
-          incus exec $1-rproxy -- nixos-rebuild switch --flake /etc/nixos#database
-          incus launch base $1-db-standby
-          incus exec $1-rproxy -- nixos-rebuild switch --flake /etc/nixos#db-standby
+          $DB_ADDRESS=$(${createContainer}/bin/create-container $1 database)
+          
         '';
       in {
         # The dev shell provides some useful commands to help with managing containers.
