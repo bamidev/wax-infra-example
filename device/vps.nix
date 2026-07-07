@@ -4,7 +4,6 @@
     "${toString modulesPath}/profiles/qemu-guest.nix"
   ];
 
-  # Use the GRUB 2 boot loader.
   boot = {
     extraModulePackages = [];
 
