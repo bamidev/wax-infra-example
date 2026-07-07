@@ -11,6 +11,9 @@
       enable = true;
       postgresqlPackage = pkgs.postgresql_17;
 
+      name = "main";
+      scope = "cluster";
+
       settings = {
         postgresql = {
           parameters = {
